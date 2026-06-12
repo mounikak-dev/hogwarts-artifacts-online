@@ -2,10 +2,7 @@ package com.learn.hogwartsartifactsonline.wizard;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.learn.hogwartsartifactsonline.artifact.Artifact;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import org.hibernate.engine.internal.Cascade;
 
 import java.io.Serializable;
@@ -18,6 +15,7 @@ import static jakarta.persistence.CascadeType.MERGE;
 public class Wizard implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
 
@@ -58,5 +56,10 @@ public class Wizard implements Serializable {
 
     public Integer getNumberOfArtifacts() {
         return this.artifacts.size();
+    }
+
+    public void removeAllArtifacts() {
+        this.artifacts.stream().forEach(artifact -> artifact.setOwner(null));
+        this.artifacts=new ArrayList<>();
     }
 }

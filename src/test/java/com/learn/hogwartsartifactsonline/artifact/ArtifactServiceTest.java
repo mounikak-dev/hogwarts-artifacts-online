@@ -2,6 +2,7 @@ package com.learn.hogwartsartifactsonline.artifact;
 
 import com.learn.hogwartsartifactsonline.artifact.dto.ArtifactDto;
 import com.learn.hogwartsartifactsonline.artifact.utils.IdWorker;
+import com.learn.hogwartsartifactsonline.system.exception.ObjectNotFoundException;
 import com.learn.hogwartsartifactsonline.wizard.Wizard;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -83,7 +84,7 @@ class ArtifactServiceTest {
             Artifact retturnedArtifact = artifactService.findById("1250808601744904192");
         });
 
-        assertThat(thrown).isInstanceOf(ArtifactNotFoundException.class).hasMessage("could not find artifact with id 1250808601744904192");
+        assertThat(thrown).isInstanceOf(ObjectNotFoundException.class).hasMessage("could not find artifact with id 1250808601744904192");
         verify(artifactRepository, times(1)).findById("1250808601744904192");
 
     }
