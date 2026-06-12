@@ -1,9 +1,7 @@
 package com.learn.hogwartsartifactsonline.system.exception;
 
-import com.learn.hogwartsartifactsonline.artifact.ArtifactNotFoundException;
 import com.learn.hogwartsartifactsonline.system.Result;
 import com.learn.hogwartsartifactsonline.system.StatusCode;
-import com.learn.hogwartsartifactsonline.wizard.WizardNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -19,9 +17,9 @@ import java.util.Map;
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
 
-    @ExceptionHandler({ArtifactNotFoundException.class, WizardNotFoundException.class})
+    @ExceptionHandler(ObjectNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    Result handleArtifactOrWizardNotFoundException(Exception ex) {
+    Result handleObjectNotFoundException(Exception ex) {
         return new Result(false, StatusCode.NOT_FOUND, ex.getMessage());
     }
 
