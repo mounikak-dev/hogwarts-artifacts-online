@@ -1,8 +1,11 @@
 package com.learn.hogwartsartifactsonline.wizard;
 
+import com.learn.hogwartsartifactsonline.artifact.Artifact;
+import com.learn.hogwartsartifactsonline.artifact.ArtifactRepository;
 import com.learn.hogwartsartifactsonline.artifact.utils.IdWorker;
 import com.learn.hogwartsartifactsonline.system.exception.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,9 +16,11 @@ public class WizardService {
 
     //private final IdWorker idWorker;
 
-    public WizardService(WizardRepository wizardRepository, IdWorker idWorker) {
+    private final ArtifactRepository artifactRepository;
+
+    public WizardService(WizardRepository wizardRepository, ArtifactRepository artifactRepository) {
         this.wizardRepository = wizardRepository;
-        //this.idWorker = idWorker;
+        this.artifactRepository = artifactRepository;
     }
 
     public List<Wizard> findAllWizards() {
@@ -46,7 +51,15 @@ public class WizardService {
         this.wizardRepository.deleteById(wizardId);
     }
 
+    @Transactional
     public void assignArtifactToWizard(Integer wizardId, String artifactId){
+        Artifact artifactToBeAssigned =  this.artifactRepository.findById(artifactId).orElseThrow(() -> new ObjectNotFoundException("Artifact not found ",artifactId));
+        Wizard wizard = this.wizardRepository.findById(wizardId).orElseThrow(() -> new ObjectNotFoundException("wizard not found ",wizardId));
 
+        if(artifactToBeAssigned.getOwner() != null){
+            artifactToBeAssigned.getOwner().removeArtifact(artifactToBeAssigned);
+        }
+
+        wizard.addArtifact(artifactToBeAssigned);
     }
 }
