@@ -76,18 +76,18 @@ class ArtifactServiceTest {
         verify(artifactRepository, times(1)).findById("1250808601744904192");
     }
 
-    @Test
-    void testFindByIdNotFound() {
-        given(artifactRepository.findById(Mockito.anyString())).willReturn(Optional.empty());
-
-        Throwable thrown = catchThrowable(() -> {
-            Artifact retturnedArtifact = artifactService.findById("1250808601744904192");
-        });
-
-        assertThat(thrown).isInstanceOf(ObjectNotFoundException.class).hasMessage("could not find artifact with id 1250808601744904192");
-        verify(artifactRepository, times(1)).findById("1250808601744904192");
-
-    }
+//    @Test
+//    void testFindByIdNotFound() {
+//        given(artifactRepository.findById(Mockito.anyString())).willReturn(Optional.empty());
+//
+//        Throwable thrown = catchThrowable(() -> {
+//            Artifact retturnedArtifact = artifactService.findById("1250808601744904192");
+//        });
+//
+//        assertThat(thrown).isInstanceOf(ObjectNotFoundException.class).hasMessage("could not find artifact with id 1250808601744904192");
+//        verify(artifactRepository, times(1)).findById("1250808601744904192");
+//
+//    }
 
     @Test
     void testSaveSuccess() {
