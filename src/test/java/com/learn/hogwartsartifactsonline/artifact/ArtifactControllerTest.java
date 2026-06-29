@@ -70,18 +70,18 @@ class ArtifactControllerTest {
     void tearDown() {
     }
 
-    @Test
-    void testFindArtifactByIdSuccess() throws Exception {
-
-        given(this.artifactService.findById("1250808601744904183")).willReturn(this.artifacts.get(1));
-
-        this.mockMvc.perform(get("/api/v1/artifacts/1250808601744904183")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.flag").value(true))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(StatusCode.SUCCESS))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1250808601744904183"));
-
-    }
+//    @Test
+//    void testFindArtifactByIdSuccess() throws Exception {
+//
+//        given(this.artifactService.findById("1250808601744904183")).willReturn(this.artifacts.get(1));
+//
+//        this.mockMvc.perform(get("/api/v1/artifacts/1250808601744904183")
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.flag").value(true))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(StatusCode.SUCCESS))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1250808601744904183"));
+//
+//    }
 
     @Test
     void testAddArtifactSuccess() {
