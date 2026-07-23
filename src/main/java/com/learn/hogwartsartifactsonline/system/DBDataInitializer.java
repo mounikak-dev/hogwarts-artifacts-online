@@ -8,9 +8,11 @@ import com.learn.hogwartsartifactsonline.hogwartsuser.UserService;
 import com.learn.hogwartsartifactsonline.wizard.Wizard;
 import com.learn.hogwartsartifactsonline.wizard.WizardRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("dev")
 public class DBDataInitializer implements CommandLineRunner {
 
     private final ArtifactRepository artifactRepository;
