@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkgrafana_assistant_app=self.webpackChunkgrafana_assistant_app||[]).push([[35390],{35390(a,e,n){n.d(e,{LazyQueryProvider:()=>i});var r=n(56308),s=n(53053),t=n(92847);function i({children:a}){return(0,r.jsx)(s.Ht,{client:t.queryClient,children:a})}}}]);
