@@ -2,18 +2,17 @@ package com.learn.hogwartsartifactsonline.artifact;
 
 import com.learn.hogwartsartifactsonline.artifact.dto.ArtifactDto;
 import com.learn.hogwartsartifactsonline.artifact.utils.IdWorker;
-import com.learn.hogwartsartifactsonline.client.ai.chat.ChatClient;
-import com.learn.hogwartsartifactsonline.client.ai.chat.ChatRequest;
-import com.learn.hogwartsartifactsonline.client.ai.chat.ChatResponse;
-import com.learn.hogwartsartifactsonline.client.ai.chat.InputData;
+import com.learn.hogwartsartifactsonline.client.ai.chat.*;
 import com.learn.hogwartsartifactsonline.system.exception.ObjectNotFoundException;
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.transaction.Transactional;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -63,18 +62,7 @@ public class ArtifactService {
         this.artifactRepository.deleteById(artifactId);
     }
 
-    public String summarizeArtifacts(List<ArtifactDto> artifactDtos){
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonArray = objectMapper.writeValueAsString(artifactDtos);
-
-        List<InputData> inputs = List.of(
-                new InputData("user_input", "your task is to generate short summary of given JSON array in at most 100 words. The summary must include number of artifacts, description of each artifact, ownership information. Do not mention the summary is from given JSON array."),
-                new InputData("user_input", jsonArray)
-        );
-
-        ChatRequest chatRequest = new ChatRequest("gemini-3.6-flash", inputs);
-
-        ChatResponse chatResponse = this.chatClient.generate(chatRequest);
-        return chatResponse.contentData().get(0).text();
+    public String summarizeArtifacts(List<ArtifactDto> artifacts){
+       return this.chatClient.generate(artifacts);
     }
 }

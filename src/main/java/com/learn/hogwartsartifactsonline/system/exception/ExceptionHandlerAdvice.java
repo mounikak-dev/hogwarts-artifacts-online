@@ -86,9 +86,10 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler({HttpClientErrorException.class, HttpServerErrorException.class})
     ResponseEntity<Result> handleRestClientException(HttpStatusCodeException ex) {
         return new ResponseEntity<>(
-                new Result(false, StatusCode.NOT_FOUND,
+                new Result(false, ex.getStatusCode().value(),
                         "A rest client code error occurred, see data for details.",
-                        ex.getMessage()), ex.getStatusCode());
+                        ex.getMessage()),
+                ex.getStatusCode());
     }
 
     // handles other unhandled exception

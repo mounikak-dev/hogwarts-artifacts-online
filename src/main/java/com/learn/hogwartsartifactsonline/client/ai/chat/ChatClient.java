@@ -1,5 +1,9 @@
 package com.learn.hogwartsartifactsonline.client.ai.chat;
 
+import com.learn.hogwartsartifactsonline.artifact.dto.ArtifactDto;
+
+import java.util.List;
+
 public interface ChatClient {
-    ChatResponse generate(ChatRequest chatRequest);
+    String generate(List<ArtifactDto> artifacts);
 }
