@@ -7,6 +7,8 @@ import com.learn.hogwartsartifactsonline.system.exception.ObjectNotFoundExceptio
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
@@ -64,5 +66,9 @@ public class ArtifactService {
 
     public String summarizeArtifacts(List<ArtifactDto> artifacts){
        return this.chatClient.generate(artifacts);
+    }
+
+    public Page<Artifact> findAll(Pageable pageable) {
+        return this.artifactRepository.findAll(pageable);
     }
 }
