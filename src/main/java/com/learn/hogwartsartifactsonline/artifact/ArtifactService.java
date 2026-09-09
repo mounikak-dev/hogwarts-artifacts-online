@@ -1,13 +1,18 @@
 package com.learn.hogwartsartifactsonline.artifact;
 
+import com.learn.hogwartsartifactsonline.artifact.dto.ArtifactDto;
 import com.learn.hogwartsartifactsonline.artifact.utils.IdWorker;
+import com.learn.hogwartsartifactsonline.client.ai.chat.*;
 import com.learn.hogwartsartifactsonline.system.exception.ObjectNotFoundException;
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.transaction.Transactional;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -17,9 +22,12 @@ public class ArtifactService {
 
     public final IdWorker idWorker;
 
-    public ArtifactService(ArtifactRepository artifactRepository, IdWorker idWorker) {
+    private final ChatClient chatClient;
+
+    public ArtifactService(ArtifactRepository artifactRepository, IdWorker idWorker, ChatClient chatClient) {
         this.artifactRepository = artifactRepository;
         this.idWorker = idWorker;
+        this.chatClient = chatClient;
     }
 
     @Observed(name="artifact", contextualName = "findByIdService")
@@ -52,5 +60,9 @@ public class ArtifactService {
     public void delete(String artifactId) {
         this.artifactRepository.findById(artifactId).orElseThrow(() -> new ObjectNotFoundException("Artifact",artifactId));
         this.artifactRepository.deleteById(artifactId);
+    }
+
+    public String summarizeArtifacts(List<ArtifactDto> artifacts){
+       return this.chatClient.generate(artifacts);
     }
 }
