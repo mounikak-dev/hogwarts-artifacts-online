@@ -9,8 +9,10 @@ import io.micrometer.observation.annotation.Observed;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -70,5 +72,24 @@ public class ArtifactService {
 
     public Page<Artifact> findAll(Pageable pageable) {
         return this.artifactRepository.findAll(pageable);
+    }
+
+    public Page<Artifact> findByCriteria(Map<String, String> criteria, Pageable pageable) {
+        Specification<Artifact> spec = Specification.unrestricted();
+
+        if(StringUtils.hasLength(criteria.get("id"))){
+            spec = spec.and(ArtifactSpecs.hasId(criteria.get("id")));
+        }
+        if(StringUtils.hasLength(criteria.get("name"))){
+            spec = spec.and(ArtifactSpecs.containsName(criteria.get("name")));
+        }
+        if(StringUtils.hasLength(criteria.get("description"))){
+            spec = spec.and(ArtifactSpecs.containsDescription(criteria.get("description")));
+        }
+        if(StringUtils.hasLength(criteria.get("ownerName"))){
+            spec = spec.and(ArtifactSpecs.hasOwnerName(criteria.get("ownerName")));
+        }
+
+        return this.artifactRepository.findAll(spec, pageable);
     }
 }
