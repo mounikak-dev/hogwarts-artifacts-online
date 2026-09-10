@@ -7,10 +7,13 @@ import com.learn.hogwartsartifactsonline.system.Result;
 import com.learn.hogwartsartifactsonline.system.StatusCode;
 import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -80,5 +83,12 @@ public class ArtifactController {
                 .collect(Collectors.toList());
         String artifactSummary = this.artifactService.summarizeArtifacts(artifactDtos);
         return new Result(true, StatusCode.SUCCESS, "Artifact Summary Success", artifactSummary);
+    }
+
+    @PostMapping("/search")
+    public Result findArtifactsByCriteria(@RequestBody Map<String, String> criteria, Pageable pageable){
+        Page<Artifact> artifactPage = this.artifactService.findByCriteria(criteria, pageable);
+        Page<ArtifactDto> artifactDtoPage = artifactPage.map(this.artifactToArtifactDtoConverter::convert);
+        return new Result(true, StatusCode.SUCCESS, "Search Artifacts Success", artifactDtoPage);
     }
 }
