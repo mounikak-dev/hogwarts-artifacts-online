@@ -70,6 +70,10 @@ public class ArtifactService {
        return this.chatClient.generate(artifacts);
     }
 
+    public Page<Artifact> findAll(Pageable pageable) {
+        return this.artifactRepository.findAll(pageable);
+    }
+
     public Page<Artifact> findByCriteria(Map<String, String> criteria, Pageable pageable) {
         Specification<Artifact> spec = Specification.unrestricted();
 
