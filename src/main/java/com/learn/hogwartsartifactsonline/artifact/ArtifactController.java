@@ -7,6 +7,8 @@ import com.learn.hogwartsartifactsonline.system.Result;
 import com.learn.hogwartsartifactsonline.system.StatusCode;
 import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -43,10 +45,11 @@ public class ArtifactController {
     }
 
     @GetMapping
-    public Result findAllArtifacts() {
-        List<Artifact> artifacts = this.artifactService.findAll();
-        List<ArtifactDto> artifactDtos = artifacts.stream().map(this.artifactToArtifactDtoConverter::convert).collect(Collectors.toList());
-        return new Result(true, StatusCode.SUCCESS, "Find All Artifacts", artifactDtos);
+    public Result findAllArtifacts(Pageable pageable) {
+        Page<Artifact> artifactPage = this.artifactService.findAll(pageable);
+        Page<ArtifactDto> artifactDtoPage = artifactPage
+                .map(this.artifactToArtifactDtoConverter::convert);
+        return new Result(true, StatusCode.SUCCESS, "Find All Artifacts", artifactDtoPage);
     }
 
     @PostMapping
