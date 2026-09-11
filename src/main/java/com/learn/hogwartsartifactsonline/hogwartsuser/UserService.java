@@ -2,6 +2,8 @@ package com.learn.hogwartsartifactsonline.hogwartsuser;
 
 import com.learn.hogwartsartifactsonline.system.exception.ObjectNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,9 +43,17 @@ public class UserService implements UserDetailsService {
 
     public HogwartsUser update(Integer userId, HogwartsUser updateUser) {
         HogwartsUser oldUser = this.userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("user", userId));
-        oldUser.setUsername(updateUser.getUsername());
-        oldUser.setEnabled(updateUser.isEnabled());
-        oldUser.setRoles(updateUser.getRoles());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        //if the user is not admin then the user can only update username
+        if(authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("ROLE_admin"))){
+            oldUser.setUsername(updateUser.getUsername());
+        }else{
+            oldUser.setUsername(updateUser.getUsername());
+            oldUser.setEnabled(updateUser.isEnabled());
+            oldUser.setRoles(updateUser.getRoles());
+        }
         return this.userRepository.save(oldUser);
     }
 
