@@ -14,11 +14,18 @@ public class GeminiChatClient implements ChatClient {
 
     private final RestClient restClient;
 
-    public GeminiChatClient(@Value("${ai.gemini.endpoint}") String endpoint,
-                            @Value("${ai.gemini.apiKey}") String apiKey,
+//    public GeminiChatClient(@Value("${ai.gemini.endpoint}") String endpoint,
+//                            @Value("${ai.gemini.apiKey}") String apiKey,
+//                            RestClient.Builder restClientBuilder) {
+//        this.restClient = restClientBuilder.baseUrl(endpoint)
+//                .defaultHeader("x-goog-api-key", apiKey)
+//                .build();
+//    }
+
+    public GeminiChatClient(
                             RestClient.Builder restClientBuilder) {
-        this.restClient = restClientBuilder.baseUrl(endpoint)
-                .defaultHeader("x-goog-api-key", apiKey)
+        this.restClient = restClientBuilder.baseUrl("endpoint")
+                .defaultHeader("x-goog-api-key", "apiKey")
                 .build();
     }
 
