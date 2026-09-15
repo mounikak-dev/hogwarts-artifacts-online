@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -64,4 +65,12 @@ public class UserController {
         return new Result(true, StatusCode.SUCCESS, "user deleted");
     }
 
+    @PatchMapping("/{userId}/password")
+    public Result changePassword(@PathVariable Integer userId, @RequestBody Map<String, String> passwordMap){
+        String oldPassword = passwordMap.get("oldPassword");
+        String newPassword = passwordMap.get("newPassword");
+        String confirmPassword = passwordMap.get("confirmPassword");
+        HogwartsUser updatedHogwartsUser = this.userService.changePassword(userId, oldPassword, newPassword, confirmPassword);
+        return new Result(true, StatusCode.SUCCESS, "password changed successfully");
+    }
 }
